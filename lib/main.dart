@@ -91,11 +91,12 @@ class _TetrisState extends State<Tetris> {
           filled.addAll(incoming);
           score += 10;
           int a = Random().nextInt(tetrisShapes.length);
-          int b = Random().nextInt(6);
+          int b = Random().nextInt(8);
           incoming = tetrisShapes[a].map((e) => e + b).toList();
           if (counter == 0) {
             timer.cancel();
             showDialog(
+                barrierDismissible: false,
                 context: context,
                 builder: (context) {
                   return Dialog(
