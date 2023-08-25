@@ -89,7 +89,8 @@ class _TetrisState extends State<Tetris> {
           filled.addAll(incoming);
           score += 10;
           int a = Random().nextInt(tetrisShapes.length);
-          incoming = tetrisShapes[a];
+          int b = Random().nextInt(6);
+          incoming = tetrisShapes[a].map((e) => e + b).toList();
         }
       }
     });
@@ -122,14 +123,14 @@ class _TetrisState extends State<Tetris> {
                                 ? Colors.blue
                                 : Colors.black,
                       ),
-                      child: Center(
-                        child: Text(
-                          index.toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      // child: Center(
+                      //   child: Text(
+                      //     index.toString(),
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
+                      // ),
                     ),
                   );
                 }),
