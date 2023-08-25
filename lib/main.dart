@@ -72,16 +72,18 @@ class _TetrisState extends State<Tetris> {
     [-9, 0, 1, 10], // Shape 9
     [-10, -9, 0, 1], // Shape 10
   ];
+
   late Timer timer;
   bool isIncoming = true;
   int score = 0;
   List<int> incoming = tetrisShapes[Random().nextInt(tetrisShapes.length)];
   List<int> filled = [];
   List<int> endLine = [170, 171, 172, 173, 174, 175, 176, 177, 178, 179];
-
+  int counter = 0;
   void gameStart() {
     timer = Timer.periodic(Duration(milliseconds: 400), (limer) {
       incoming = incoming.map((e) => e + 10).toList();
+      counter++;
       setState(() {});
       for (int i = 0; i < 4; i++) {
         if (endLine.contains(incoming[i]) ||
@@ -91,6 +93,38 @@ class _TetrisState extends State<Tetris> {
           int a = Random().nextInt(tetrisShapes.length);
           int b = Random().nextInt(6);
           incoming = tetrisShapes[a].map((e) => e + b).toList();
+          if (counter == 0) {
+            timer.cancel();
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Game Over    Score: $score',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                filled = [];
+                                score = 0;
+                                counter = 0;
+                                Navigator.of(context).pop();
+                                gameStart();
+                              },
+                              child: Text('Play Again!'))
+                        ],
+                      ),
+                    ),
+                  );
+                });
+          }
+          counter = 0;
         }
       }
     });
@@ -103,7 +137,7 @@ class _TetrisState extends State<Tetris> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.blue[900],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,7 +151,7 @@ class _TetrisState extends State<Tetris> {
                     padding: const EdgeInsets.all(1),
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(4)),
+                        //borderRadius: BorderRadius.all(Radius.circular(4)),
                         color:
                             incoming.contains(index) || filled.contains(index)
                                 ? Colors.blue
